@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PricingTable } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import {
-  ArrowLeft,
   CheckCircle2,
   Sparkles,
   Loader2,
@@ -9,8 +9,13 @@ import {
 } from "lucide-react";
 import { TIER_FEATURES, getTierColorClasses } from "@/lib/constants";
 import { Header } from "@/components/Header";
+import { PricingCards } from "../../../components/PricingCards";
 
-export default function PricingPage() {
+const useClerkBilling = process.env.NEXT_PUBLIC_USE_CLERK_BILLING === "true";
+
+export default async function PricingPage() {
+  const user = await currentUser();
+  const isSignedIn = !!user;
   return (
     <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
       {/* Animated gradient mesh background */}
@@ -90,94 +95,98 @@ export default function PricingPage() {
           })}
         </div>
 
-        {/* Clerk Pricing Table */}
+        {/* Pricing Section */}
         <div className="clerk-pricing-wrapper rounded-2xl bg-zinc-900/50 border border-zinc-800 p-6 md:p-10">
-          <PricingTable
-            appearance={{
-              elements: {
-                pricingTable: {
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "1.5rem",
+          {useClerkBilling ? (
+            <PricingTable
+              appearance={{
+                elements: {
+                  pricingTable: {
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "1.5rem",
+                  },
+                  pricingTableCard: {
+                    borderRadius: "1rem",
+                    border: "1px solid rgba(139, 92, 246, 0.2)",
+                    boxShadow: "0 10px 40px rgba(139, 92, 246, 0.1)",
+                    transition: "all 0.3s ease",
+                    overflow: "hidden",
+                    background: "rgba(24, 24, 27, 0.8)",
+                    backdropFilter: "blur(10px)",
+                  },
+                  pricingTableCardHeader: {
+                    background:
+                      "linear-gradient(135deg, rgb(139 92 246), rgb(192 132 252))",
+                    color: "white",
+                    borderRadius: "1rem 1rem 0 0",
+                    padding: "2rem",
+                  },
+                  pricingTableCardTitle: {
+                    fontSize: "1.5rem",
+                    fontWeight: "800",
+                    color: "white",
+                    marginBottom: "0.25rem",
+                  },
+                  pricingTableCardDescription: {
+                    fontSize: "0.9rem",
+                    color: "rgba(255, 255, 255, 0.85)",
+                    fontWeight: "500",
+                  },
+                  pricingTableCardFee: {
+                    color: "white",
+                    fontWeight: "800",
+                    fontSize: "2.5rem",
+                  },
+                  pricingTableCardFeePeriod: {
+                    color: "rgba(255, 255, 255, 0.8)",
+                    fontSize: "1rem",
+                  },
+                  pricingTableCardBody: {
+                    padding: "1.5rem",
+                    background: "rgba(24, 24, 27, 0.9)",
+                  },
+                  pricingTableCardFeatures: {
+                    marginTop: "1rem",
+                    gap: "0.75rem",
+                  },
+                  pricingTableCardFeature: {
+                    fontSize: "0.9rem",
+                    padding: "0.5rem 0",
+                    fontWeight: "500",
+                    color: "rgba(255, 255, 255, 0.8)",
+                  },
+                  pricingTableCardButton: {
+                    marginTop: "1.5rem",
+                    borderRadius: "0.75rem",
+                    fontWeight: "700",
+                    padding: "0.875rem 2rem",
+                    transition: "all 0.2s ease",
+                    fontSize: "1rem",
+                    background:
+                      "linear-gradient(135deg, rgb(139 92 246), rgb(192 132 252))",
+                    border: "none",
+                    boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
+                  },
+                  pricingTableCardPeriodToggle: {
+                    color: "white",
+                  },
                 },
-                pricingTableCard: {
-                  borderRadius: "1rem",
-                  border: "1px solid rgba(139, 92, 246, 0.2)",
-                  boxShadow: "0 10px 40px rgba(139, 92, 246, 0.1)",
-                  transition: "all 0.3s ease",
-                  overflow: "hidden",
-                  background: "rgba(24, 24, 27, 0.8)",
-                  backdropFilter: "blur(10px)",
-                },
-                pricingTableCardHeader: {
-                  background:
-                    "linear-gradient(135deg, rgb(139 92 246), rgb(192 132 252))",
-                  color: "white",
-                  borderRadius: "1rem 1rem 0 0",
-                  padding: "2rem",
-                },
-                pricingTableCardTitle: {
-                  fontSize: "1.5rem",
-                  fontWeight: "800",
-                  color: "white",
-                  marginBottom: "0.25rem",
-                },
-                pricingTableCardDescription: {
-                  fontSize: "0.9rem",
-                  color: "rgba(255, 255, 255, 0.85)",
-                  fontWeight: "500",
-                },
-                pricingTableCardFee: {
-                  color: "white",
-                  fontWeight: "800",
-                  fontSize: "2.5rem",
-                },
-                pricingTableCardFeePeriod: {
-                  color: "rgba(255, 255, 255, 0.8)",
-                  fontSize: "1rem",
-                },
-                pricingTableCardBody: {
-                  padding: "1.5rem",
-                  background: "rgba(24, 24, 27, 0.9)",
-                },
-                pricingTableCardFeatures: {
-                  marginTop: "1rem",
-                  gap: "0.75rem",
-                },
-                pricingTableCardFeature: {
-                  fontSize: "0.9rem",
-                  padding: "0.5rem 0",
-                  fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.8)",
-                },
-                pricingTableCardButton: {
-                  marginTop: "1.5rem",
-                  borderRadius: "0.75rem",
-                  fontWeight: "700",
-                  padding: "0.875rem 2rem",
-                  transition: "all 0.2s ease",
-                  fontSize: "1rem",
-                  background:
-                    "linear-gradient(135deg, rgb(139 92 246), rgb(192 132 252))",
-                  border: "none",
-                  boxShadow: "0 4px 15px rgba(139, 92, 246, 0.3)",
-                },
-                pricingTableCardPeriodToggle: {
-                  color: "white",
-                },
-              },
-            }}
-            fallback={
-              <div className="flex items-center justify-center py-20">
-                <div className="text-center space-y-4">
-                  <Loader2 className="h-12 w-12 animate-spin text-violet-500 mx-auto" />
-                  <p className="text-zinc-400 text-lg font-medium">
-                    Loading pricing options...
-                  </p>
+              }}
+              fallback={
+                <div className="flex items-center justify-center py-20">
+                  <div className="text-center space-y-4">
+                    <Loader2 className="h-12 w-12 animate-spin text-violet-500 mx-auto" />
+                    <p className="text-zinc-400 text-lg font-medium">
+                      Loading pricing options...
+                    </p>
+                  </div>
                 </div>
-              </div>
-            }
-          />
+              }
+            />
+          ) : (
+            <PricingCards isSignedIn={isSignedIn} />
+          )}
         </div>
 
         {/* FAQ or extra info */}

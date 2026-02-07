@@ -6,6 +6,7 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
+  SignUpButton,
   UserButton,
   useAuth,
 } from "@clerk/nextjs";
@@ -27,9 +28,9 @@ import {
 import { cn } from "@/lib/utils";
 
 const loggedOutLinks = [
-  { href: "#courses", label: "Courses" },
+  { href: "/#courses", label: "Courses" },
   { href: "/pricing", label: "Pricing" },
-  { href: "#testimonials", label: "Reviews" },
+  { href: "/#testimonials", label: "Reviews" },
 ];
 
 export function Header() {
@@ -146,11 +147,11 @@ export function Header() {
               Sign in
             </Button>
           </SignInButton>
-          <Link href="/pricing" className="hidden sm:block">
+          <SignUpButton mode="modal">
             <Button className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white border-0 shadow-lg shadow-violet-600/25">
               Start Learning
             </Button>
-          </Link>
+          </SignUpButton>
         </SignedOut>
 
         <SignedIn>
