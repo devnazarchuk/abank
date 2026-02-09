@@ -14,6 +14,34 @@ export const courseType = defineType({
   ],
   fields: [
     defineField({
+      name: "aiGenerated",
+      type: "boolean",
+      group: "settings",
+      description: "Was this course created with AI assistance?",
+      initialValue: false,
+    }),
+    defineField({
+      name: "targetAudience",
+      type: "string",
+      group: "details",
+      options: {
+        list: [
+          { title: "Beginner", value: "beginner" },
+          { title: "Intermediate", value: "intermediate" },
+          { title: "Advanced", value: "advanced" },
+          { title: "Mixed", value: "mixed" },
+        ],
+        layout: "radio",
+      },
+    }),
+    defineField({
+      name: "estimatedDuration",
+      type: "number",
+      group: "details",
+      description: "Estimated hours to complete the course",
+      validation: (Rule) => Rule.min(0).precision(1),
+    }),
+    defineField({
       name: "title",
       type: "string",
       group: "details",

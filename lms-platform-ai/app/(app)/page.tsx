@@ -87,7 +87,7 @@ export default async function Home() {
               className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed animate-fade-in"
               style={{ animationDelay: "0.3s" }}
             >
-              Join Sonny&apos;s Academy and learn from expertly crafted courses,
+              Join our platform and learn from expertly crafted courses,
               modules, and hands-on lessons. From free fundamentals to{" "}
               <span className="text-fuchsia-400">Pro exclusives</span> and{" "}
               <span className="text-cyan-400">Ultra gems</span>.
@@ -278,7 +278,7 @@ export default async function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {courses.map((course) => (
+            {courses.map((course: any) => (
               <CourseCard
                 key={course.slug!.current!}
                 slug={{ current: course.slug!.current! }}
@@ -325,7 +325,7 @@ export default async function Home() {
                 name: "Alex Chen",
                 role: "Junior Developer",
                 content:
-                  "Sonny's teaching style is incredible. I went from knowing nothing to landing my first dev job in 6 months!",
+                  "The teaching style is incredible. I went from knowing nothing to landing my first dev job in 6 months!",
                 avatar: "🧑‍💻",
               },
               {
@@ -409,7 +409,7 @@ export default async function Home() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center">
                 <Code2 className="w-4 h-4 text-white" />
               </div>
-              <span className="font-bold">Sonny&apos;s Academy</span>
+              <span className="font-bold">LMS Platform</span>
             </div>
             <div className="flex items-center gap-8 text-sm text-zinc-500">
               <Link href="#" className="hover:text-white transition-colors">
@@ -423,7 +423,7 @@ export default async function Home() {
               </Link>
             </div>
             <p className="text-sm text-zinc-600">
-              © 2024 Sonny&apos;s Academy. All rights reserved.
+              © 2024 LMS Platform. All rights reserved.
             </p>
           </div>
         </footer>

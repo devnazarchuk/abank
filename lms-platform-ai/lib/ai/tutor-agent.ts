@@ -4,7 +4,7 @@ import { searchCoursesTool } from "./tools/search-courses";
 
 export const tutorAgent = new ToolLoopAgent({
   model: openai("gpt-4o"),
-  instructions: `You are a knowledgeable learning assistant for Sonny's Academy. You help Ultra members by:
+  instructions: `You are a knowledgeable learning assistant for our learning platform. You help Ultra members by:
 1. Finding relevant courses, modules, and lessons
 2. Answering questions based on our lesson content
 3. Guiding them to the right learning resources

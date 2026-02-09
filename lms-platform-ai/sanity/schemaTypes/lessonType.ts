@@ -51,6 +51,40 @@ export const lessonType = defineType({
       description: "Upload or select a video for this lesson",
     }),
     defineField({
+      name: "youtubeUrl",
+      type: "url",
+      group: ["content", "video"],
+      description: "YouTube video URL (alternative to Mux)",
+      validation: (Rule) => Rule.uri({ scheme: ["http", "https"] }),
+    }),
+    defineField({
+      name: "externalResources",
+      type: "array",
+      group: "content",
+      title: "External Resources",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", type: "string" }),
+            defineField({ name: "url", type: "url" }),
+            defineField({
+              name: "type",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Video", value: "video" },
+                  { title: "Article", value: "article" },
+                  { title: "Documentation", value: "documentation" },
+                  { title: "Other", value: "other" },
+                ],
+              },
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
       name: "content",
       type: "array",
       group: "content",

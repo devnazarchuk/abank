@@ -18,6 +18,69 @@ import type { ProjectionBase } from "groq";
 
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
+export type Post = {
+  _id: string;
+  _type: "post";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  publishedAt?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
 export type Note = {
   _id: string;
   _type: "note";
@@ -39,6 +102,13 @@ export type Lesson = {
   slug?: Slug;
   description?: string;
   video?: MuxVideo;
+  youtubeUrl?: string;
+  externalResources?: Array<{
+    title?: string;
+    url?: string;
+    type?: "video" | "article" | "documentation" | "other";
+    _key: string;
+  }>;
   content?: Array<
     | {
         children?: Array<{
@@ -85,22 +155,6 @@ export type Lesson = {
   completedBy?: Array<string>;
 };
 
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
 export type MuxVideo = {
   _type: "mux.video";
   asset?: {
@@ -109,12 +163,6 @@ export type MuxVideo = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "mux.videoAsset";
   };
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type Module = {
@@ -141,6 +189,9 @@ export type Course = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  aiGenerated?: boolean;
+  targetAudience?: "beginner" | "intermediate" | "advanced" | "mixed";
+  estimatedDuration?: number;
   title?: string;
   slug?: Slug;
   description?: string;
@@ -369,12 +420,13 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | Note
-  | Lesson
+  | Post
   | SanityImageCrop
   | SanityImageHotspot
-  | MuxVideo
   | Slug
+  | Note
+  | Lesson
+  | MuxVideo
   | Module
   | Course
   | Category
@@ -396,12 +448,13 @@ export type AllSanitySchemaTypes =
 // Source: ./schema.json
 // Schema ID: default
 export type DefaultSchema =
-  | Note
-  | Lesson
+  | Post
   | SanityImageCrop
   | SanityImageHotspot
-  | MuxVideo
   | Slug
+  | Note
+  | Lesson
+  | MuxVideo
   | Module
   | Course
   | Category

@@ -1,5 +1,5 @@
 {
-  "name": "sanity-clerk-coderabbit-build-december",
+  "name": "lms-platform",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +23,7 @@
     "@mux/mux-node": "^12.8.0",
     "@mux/mux-player-react": "^3.10.2",
     "@mux/mux-uploader-react": "^1.4.0",
+    "@next/env": "^16.1.6",
     "@portabletext/editor": "^3.1.1",
     "@portabletext/keyboard-shortcuts": "^2.1.0",
     "@portabletext/react": "^6.0.2",
