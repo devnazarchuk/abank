@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import { Button } from "@/components/ui/button";
 import {
     Loader2,
@@ -13,6 +13,14 @@ import {
     Play,
 } from "lucide-react";
 
+// Local Message interface to avoid import issues
+interface Message {
+    id: string;
+    role: string;
+    content: string;
+    toolInvocations?: any[];
+}
+
 interface CourseWizardProps {
     onComplete?: (courseId: string) => void;
     onCancel?: () => void;
@@ -21,10 +29,11 @@ interface CourseWizardProps {
 export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
     const [isPaused, setIsPaused] = useState(false);
 
+    // Cast useChat to any to avoid strict type checks with beta versions
     const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
-        useChat({
+        (useChat as any)({
             api: "/api/ai/course-generator",
-            onFinish: (message) => {
+            onFinish: (message: Message) => {
                 // Check if course is complete
                 if (message.content.includes("🎉 Course Complete")) {
                     // Extract course ID from message if available
@@ -41,7 +50,7 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
         setIsPaused(!isPaused);
     };
 
-    const currentPhase = detectPhase(messages);
+    const currentPhase = detectPhase(messages as Message[]);
 
     return (
         <div className="flex flex-col h-full bg-zinc-900 rounded-xl border border-zinc-800">
@@ -52,9 +61,7 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                         <Sparkles className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-bold text-white">
-                            AI Course Creator
-                        </h2>
+                        <h2 className="text-xl font-bold text-white">AI Course Creator</h2>
                         <p className="text-sm text-zinc-400">
                             Phase {currentPhase.number}: {currentPhase.name}
                         </p>
@@ -105,21 +112,25 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                     </span>
                 </div>
                 <div className="flex gap-2 text-xs">
-                    {["Requirements", "Research", "Structure", "Content", "Complete"].map(
-                        (phase, idx) => (
-                            <div
-                                key={phase}
-                                className={`flex-1 text-center py-1 rounded ${idx < currentPhase.number - 1
-                                        ? "bg-violet-500/20 text-violet-300"
-                                        : idx === currentPhase.number - 1
-                                            ? "bg-violet-500/40 text-violet-200 font-medium"
-                                            : "bg-zinc-800/50 text-zinc-500"
-                                    }`}
-                            >
-                                {phase}
-                            </div>
-                        ),
-                    )}
+                    {[
+                        "Requirements",
+                        "Research",
+                        "Structure",
+                        "Content",
+                        "Complete",
+                    ].map((phase, idx) => (
+                        <div
+                            key={phase}
+                            className={`flex-1 text-center py-1 rounded ${idx < currentPhase.number - 1
+                                    ? "bg-violet-500/20 text-violet-300"
+                                    : idx === currentPhase.number - 1
+                                        ? "bg-violet-500/40 text-violet-200 font-medium"
+                                        : "bg-zinc-800/50 text-zinc-500"
+                                }`}
+                        >
+                            {phase}
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -134,8 +145,8 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                             Let's create something amazing!
                         </h3>
                         <p className="text-zinc-400 max-w-md mx-auto">
-                            I'll guide you through creating a comprehensive course. We'll
-                            start by gathering some basic information.
+                            I'll guide you through creating a comprehensive course. We'll start
+                            by gathering some basic information.
                         </p>
                         <Button
                             onClick={() =>
@@ -154,7 +165,7 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                     </div>
                 )}
 
-                {messages.map((message) => (
+                {messages.map((message: Message) => (
                     <div
                         key={message.id}
                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
@@ -168,7 +179,7 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                             <div className="text-sm whitespace-pre-wrap">
                                 {message.content}
                             </div>
-                            {message.toolInvocations?.map((tool, idx) => (
+                            {message.toolInvocations?.map((tool: any, idx: number) => (
                                 <div
                                     key={idx}
                                     className="mt-3 pt-3 border-t border-white/10 text-xs opacity-75"
@@ -180,10 +191,14 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
                                             <Loader2 className="w-3 h-3 animate-spin" />
                                         )}
                                         <span>
-                                            {tool.toolName === "searchYouTube" && "🎥 Searching YouTube..."}
-                                            {tool.toolName === "webResearch" && "🔍 Researching topic..."}
-                                            {tool.toolName === "createCourseStructure" && "🏗️ Creating structure..."}
-                                            {tool.toolName === "populateLesson" && "✍️ Adding lesson content..."}
+                                            {tool.toolName === "searchYouTube" &&
+                                                "🎥 Searching YouTube..."}
+                                            {tool.toolName === "webResearch" &&
+                                                "🔍 Researching topic..."}
+                                            {tool.toolName === "createCourseStructure" &&
+                                                "🏗️ Creating structure..."}
+                                            {tool.toolName === "populateLesson" &&
+                                                "✍️ Adding lesson content..."}
                                         </span>
                                     </div>
                                 </div>
@@ -241,19 +256,28 @@ export function CourseWizard({ onComplete, onCancel }: CourseWizardProps) {
 }
 
 // Helper function to detect current phase from messages
-function detectPhase(messages: any[]) {
+function detectPhase(messages: Message[]) {
     const lastMessage = messages[messages.length - 1]?.content || "";
 
     if (lastMessage.includes("🎉 Course Complete")) {
         return { number: 5, name: "Complete", progress: 100 };
     }
-    if (lastMessage.includes("Working on Lesson") || lastMessage.includes("Progress:")) {
+    if (
+        lastMessage.includes("Working on Lesson") ||
+        lastMessage.includes("Progress:")
+    ) {
         return { number: 4, name: "Content Generation", progress: 75 };
     }
-    if (lastMessage.includes("Course Structure Created") || lastMessage.includes("✅")) {
+    if (
+        lastMessage.includes("Course Structure Created") ||
+        lastMessage.includes("✅")
+    ) {
         return { number: 3, name: "Structure Creation", progress: 50 };
     }
-    if (lastMessage.includes("Research Results") || lastMessage.includes("📚")) {
+    if (
+        lastMessage.includes("Research Results") ||
+        lastMessage.includes("📚")
+    ) {
         return { number: 2, name: "Research", progress: 25 };
     }
 

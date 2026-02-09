@@ -8,7 +8,7 @@ import { populateLessonTool } from "./tools/populate-lesson";
  * Course Generator Agent
  * Guides users through creating comprehensive courses via conversational wizard
  */
-export const courseGeneratorAgent = new ToolLoopAgent({
+export const courseGeneratorAgent = {
     model: openai("gpt-4o"),
     instructions: `You are an expert course creator assistant for an LMS platform. Your role is to guide administrators through creating high-quality, comprehensive courses using a conversational, step-by-step approach.
 
@@ -184,4 +184,4 @@ Start by warmly greeting the user and asking the first question.`,
         createCourseStructure: createCourseStructureTool,
         populateLesson: populateLessonTool,
     },
-});
+};

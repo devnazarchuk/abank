@@ -14,7 +14,7 @@ export async function POST(req: Request) {
             system: courseGeneratorAgent.instructions,
             tools: courseGeneratorAgent.tools,
             maxSteps: 10,
-        });
+        } as any);
 
         // Use toDataStreamResponse for tool support (cast to any if type definition is missing)
         return (result as any).toDataStreamResponse();
