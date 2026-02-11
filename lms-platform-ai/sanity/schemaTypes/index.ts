@@ -6,6 +6,8 @@ import { moduleType } from "./moduleType";
 import { noteType } from "./noteType";
 import { postType } from "./postType";
 
+import { userType } from "./userType";
+
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [courseType, moduleType, lessonType, categoryType, noteType, postType],
+  types: [userType, courseType, moduleType, lessonType, categoryType, noteType, postType],
 };

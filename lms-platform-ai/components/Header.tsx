@@ -8,7 +8,7 @@ import {
   SignInButton,
   SignUpButton,
   UserButton,
-  useAuth,
+  useUser,
 } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,9 +35,10 @@ const loggedOutLinks = [
 
 export function Header() {
   const pathname = usePathname();
-  const { has } = useAuth();
+  const { user } = useUser();
 
-  const isUltra = has?.({ plan: "ultra" });
+  const userTier = (user?.publicMetadata?.tier as string) || "free";
+  const isUltra = userTier === "ultra";
 
   const loggedInLinks = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
